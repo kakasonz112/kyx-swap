@@ -1,0 +1,133 @@
+.profileHeader {
+}
+
+.coverImage {
+  width: 100%;
+  background-color: #272a2d;
+  height: 300px;
+  border-radius: 16px;
+}
+
+.banner {
+  background: url('../img/Banner_AGC_Marketplace.png') center no-repeat;
+  background-size: contain;
+  width: 50%;
+  height: 300px;
+  border-radius: 16px;
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  .banner {
+    width: 100%;
+    height: 150px;
+  }
+}
+
+.profilePicture {
+  width: 132px;
+  height: 132px;
+  border-radius: 132px;
+  vertical-align: inherit;
+  outline: 3px solid rgba(255, 255, 255, 0.1);
+  margin-top: -72px;
+  margin-left: 5%;
+}
+
+.profileName {
+  margin-left: 2.5%;
+}
+
+.tabs {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: color 0.1s ease-in-out;
+}
+
+.tab:hover {
+  color: #e55743;
+  opacity: 0.7;
+}
+
+.activeTab {
+  border-bottom: 2px solid #e55743;
+  color: #e55743;
+}
+
+.tabContent {
+  display: none;
+  height: 0px;
+  opacity: 0;
+  transition: all 0.1s linear;
+}
+
+.activeTabContent {
+  display: flex;
+  flex-direction: row;
+  opacity: 1;
+  margin-bottom: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
+.imageWrapper {
+  width: 100%;
+  height: auto;
+}
+
+#img-wrapper1 {
+  width: clamp(300px, 55vw, 1366px);
+  top: 25%;
+  left: 5%;
+}
+
+#img-wrapper2{
+  width: clamp(250px, 45vw, 640px);
+  top: 48%;
+  right: 5%;
+}
+
+#img-wrapper3 {
+  width: clamp(250px, 30vw, 519px);
+  top: 65%;
+  left: 35%;
+}
+
+#reload:hover {
+  opacity: 0.3;
+}
+
+#reload {
+  opacity: 0.3;
+}
+
+.group {
+  background-color: transparent;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+
+}
+
+.groupLabel {
+  width: 100%;
+  margin: 1rem;
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}

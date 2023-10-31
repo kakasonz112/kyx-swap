@@ -1,0 +1,42 @@
+## Sepolia---
+## Marketplace---
+0x54194FA8360a403d10F5b6E5e5A01A8634643724
+## NFT---
+0x9364Beb808469bb2B772c0F0aAc6B21CB18D8bC8
+
+## Token---
+0x935317b6B29CcFEF427b86478e30aD5613a0a009
+
+
+
+## Goerli
+## Marketplace---
+0x37902b74072E45Da2907C33C396a3E57Fc9E6DB1
+
+## NFT---
+0x4971E6d00c0CE51677D6c677D52Ffd9d0e197e47
+0xdd65b4CA6322075D30C060d44364122d0113e3B3
+0x9620A19e49E76495Bc0D45AFd4A6a9c99ABfa094
+
+## Token---
+0x5A1B6A5095063292541014E11cD2056DE3d1813D
+
+## create Listing
+{ "assetContract": "0x9364Beb808469bb2B772c0F0aAc6B21CB18D8bC8", "tokenId": "4", "startTime": "1688557207", "secondsUntilEndTime": "604800", "quantityToList": "1", "currencyToAccept": "0x5A1B6A5095063292541014E11cD2056DE3d1813D", "reservePricePerToken": "500000000000000000000", "buyoutPricePerToken": "500000000000000000000", "listingType": "1" }
+
+{ "assetContract": "0xdd65b4CA6322075D30C060d44364122d0113e3B3", "tokenId": "5", "quantity": "1", "currency": "0x5A1B6A5095063292541014E11cD2056DE3d1813D", "pricePerToken": "500000000000000000000", "startTimestamp": "0", "endTimestamp": "0", "reserved": true }
+
+{ "assetContract": "0xdd65b4CA6322075D30C060d44364122d0113e3B3", "tokenId": "5", "quantity": "1", "currency": "0x5A1B6A5095063292541014E11cD2056DE3d1813D", "minimumBidAmount": "50000000000000000000", "buyoutBidAmount": "500000000000000000000", "timeBufferInSeconds": "900", "bidBufferBps": "500", "startTimestamp": "1689671366", "endTimestamp": "1689757766" }
+
+## Auction Status
+  UNSET = 0,
+  Created = 1,
+  Completed = 2,
+  Cancelled = 3,
+  Active = 4,
+  Expired = 5,
+
+500000000000000000000
+000000000000000000
+20000000000000000000000
+
