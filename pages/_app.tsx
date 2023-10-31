@@ -11,8 +11,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider 
       activeChain={NETWORK} 
-      clientId="85c6a9c2c419f39e5efc5d3d0cf390c8"
-      secretKey="bVTbKFefu7OjLYubj0EkwbvzJ1Fmp_O7CGlEYUTseZKvH3LIHlNcF6l6nq1kC1p-HKuvpjJWu8f6e4JW0x8N4w"
+      clientId="4efe01e1a42b9eb67db008e00ee20394"
+      secretKey="gG2NJpvp9U6Ce2f94eefANTxLEi5YHmslmmWxaVtObeua_2HvNq0YytVFtiv27I4FCP9ZjTPOZWoCWtN1lvwcQ"
     >
       <Head>
         <title>AGC Marketplace</title>
