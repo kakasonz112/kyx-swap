@@ -118,9 +118,9 @@ export default function ListingWrapper({ eventId }: Props) {
             <p className={styles.nftPriceLabel}>Status</p>
             <p className={styles.nftPriceValue}>
             {
-            timerComponents.length ? 
+            raffle.raffleStatus ? 
 
-                <span className={styles.statusDot1} data-status="live"></span>
+                <span className={styles.statusDot1} data-status="live"> </span>
 
             :
                 <span className={styles.statusDot2} data-status="end"></span>
@@ -183,7 +183,7 @@ export default function ListingWrapper({ eventId }: Props) {
             <p className={styles.nftPriceValue}>
               {
               //@ts-ignore 
-              raffle.winner
+              raffle.winner.slice(0, 8)}...{raffle.winner.slice(-4)
               }
             </p>
           </div>              

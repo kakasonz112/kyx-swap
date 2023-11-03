@@ -10,7 +10,7 @@ import {
 
 } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../components/Container/Container";
 import ListingWrapper from "../components/ListingWrapper/ListingWrapper";
 import RaffleWrapper from "../components/Raffle/RaffleWrapper";
@@ -26,6 +26,7 @@ import LoadingSpinner from "../components/Spinner/Spinner";
 import { BigNumber } from "ethers";
 
 var arr: any[] = [];
+var arr2: any[] = [];
 type Raffle = {
   raffleId: BigNumber;
   raffleStatus: boolean;
@@ -52,11 +53,7 @@ const Home: NextPage = () => {
   const { contract: raffles } = useContract(RAFFLES_ADDRESS);
   // ---------------//
 
-
-
-  // --------------- //
   // Raffles 
-
   const { data: totalEvent, isLoading: loadRaffles, error: errorRaffles } = useContractRead(
     raffles, 
     "eventId"
@@ -152,7 +149,10 @@ const Home: NextPage = () => {
               }
 
             <div className={styles.group}>
-              <div className={styles.groupLabel} style={{color: 'rgba(240, 21, 18, 0.85)'}}> Expired </div>
+              <div className={styles.groupLabel} style={{color: 'rgba(240, 21, 18, 0.85)'}}> 
+                Expired 
+              </div>
+
               {loadingAuctions ? (
                 <LoadingSpinner />
               ) : auctionListings && auctionListings.length === 0 ? (
@@ -180,23 +180,34 @@ const Home: NextPage = () => {
         }`}
       >
         {
-        
-        loadRaffles ? 
-          <LoadingSpinner />
-         : 
-          arr.length == 0 ? 
-            <span>No Raffles</span>
-            : 
-            (
-              arr?.reverse().map((listing, key) => (
-                <Link
-                href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
-                key={listing}
-                >
-                  <RaffleWrapper eventId={listing} key={key}/>
-                </Link>
-              ))
-            )
+          loadRaffles ? 
+            <LoadingSpinner />
+          : 
+
+          <div className={styles.group}>
+              <div className={styles.groupLabel} style={{color: 'rgb(60, 179, 113)'}}> 
+                Available 
+              </div>
+            {
+              arr.length == 0 ? 
+              <span>No Raffles</span>
+              : 
+                  (
+                    arr?.reverse().map((listing, key) => (
+                      
+                      <Link
+                      href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
+                      key={listing}
+                      >
+                        <RaffleWrapper eventId={listing} key={key}/> 
+                        
+                      </Link>
+                    ))
+                  )
+
+            }
+
+          </div>
         }
           
       </div>

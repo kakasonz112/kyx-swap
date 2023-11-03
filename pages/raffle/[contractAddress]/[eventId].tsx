@@ -311,7 +311,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
             </div>
 
             <div className={styles.balance}>
-              Balance: {Number(agcBalance?.value) / 1000000000000000000} {agcBalance?.symbol}
+              Balance: {(Number(agcBalance?.value) / 1000000000000000000).toFixed(2)} {agcBalance?.symbol}
             </div>
 
             {
