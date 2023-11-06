@@ -9,7 +9,7 @@ import {
 } from "@thirdweb-dev/react";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { RAFFLES_ADDRESS, NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
+import { RAFFLES_ADDRESS, NFT_COLLECTION_ADDRESS, CURRENCY_ADDRESS } from "../../const/contractAddresses";
 import styles from "../../styles/Raffles.module.css";
 import styles2 from "../../styles/Buy.module.css";
 import Skeleton from "../Skeleton/Skeleton";
@@ -39,7 +39,7 @@ type Props = {
 
 export default function ListingWrapper({ eventId }: Props) {
 
-  const { data: agcBalance, isLoading: loadAGC } = useBalance('0x5A1B6A5095063292541014E11cD2056DE3d1813D');
+  const { data: agcBalance, isLoading: loadAGC } = useBalance(CURRENCY_ADDRESS);
 
   const { contract: nftAddr } = useContract(NFT_COLLECTION_ADDRESS);
 

@@ -6,7 +6,9 @@ import {
   useContractRead,
   useContractWrite,
   useAddress,
-  useBalance
+  useBalance,
+  lightTheme,
+  useChain
 } from "@thirdweb-dev/react";
 import React, { useState, useEffect } from "react";
 import Container from "../../../components/Container/Container";
@@ -40,6 +42,7 @@ const [randomColor1, randomColor2] = [randomColor(), randomColor()];
 
 export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
   const address = useAddress();
+  const chain = useChain();
 
   const [raffleValue, setRaffleValue] = useState<number>(1);
 
@@ -66,7 +69,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
   );
 
     // Load AGC Balance
-    const { data: agcBalance, isLoading: loadAGC } = useBalance('0x5A1B6A5095063292541014E11cD2056DE3d1813D');
+    const { data: agcBalance, isLoading: loadAGC } = useBalance(CURRENCY_ADDRESS);
     
   // convert epoch to date
   function convertEpoch (epoch: any) {
@@ -199,10 +202,11 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
       <Toaster position="bottom-center" reverseOrder={false} />
       <Container maxWidth="lg">
         <div className={styles.container}>
-          <div className={styles.metadataContainer}>
+          <div className={styles.metadataContainer} >
             <ThirdwebNftMedia
               metadata={nft.metadata}
               className={styles.image}
+              style={{maxWidth: '500px', margin: '0 auto'}}
             />
 
             <div className={styles.descriptionContainer}>
@@ -310,7 +314,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
               </div>
             </div>
 
-            <div className={styles.balance}>
+            <div className={styles.balance} >
               Balance: {(Number(agcBalance?.value) / 1000000000000000000).toFixed(2)} {agcBalance?.symbol}
             </div>
 
@@ -321,8 +325,9 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
 
               raffle?.raffleStatus && timerComponents.length!=0 ? 
               <>
-                <div className={styles.ticketCounter}>
-                  <button type="button" className={styles.btn} onClick={decNum} > - </button>
+                <div className={styles.ticketCounter} style={{ width: '100%'}}>
+                  <button type="button" className={styles.btn} onClick={decNum} style={{marginBottom: '1rem'}}> - </button>
+                    Amount
                     <input
                     className={styles.input}
                     min={1}
@@ -331,27 +336,84 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                     value={raffleValue}
                     onChange={handleChange}
                     />
-                  <button type="button" className={styles.btn} onClick={incNum} > + </button>
+                  <button type="button" className={styles.btn} onClick={incNum} style={{marginBottom: '1rem'}}> + </button>
                 </div>
-                <Web3Button
-                  contractAddress={RAFFLES_ADDRESS}
-                  action={async () => await buyRaffle(raffleValue, await calcCost(raffleValue, Number(raffle?.raffleCost)))}
-                  className={styles.btn}
-                  onSuccess={() => {
-                    toast(`${raffleValue}x Raffle Bought!`, {
-                      icon: "✅",
-                      position: "bottom-center",
-                    });
-                  }}
-                  onError={(e) => {
-                    toast(`Purchase failed.`, {
-                      icon: "❌",
-                      position: "bottom-center",
-                    });
-                  }}
-                >
-                  Buy Raffle
-                </Web3Button>
+
+                {
+                    chain?.chainId != 5 ? 
+                    <Web3Button
+                    contractAddress={RAFFLES_ADDRESS}
+                    action={async () => await buyRaffle(raffleValue, await calcCost(raffleValue, Number(raffle?.raffleCost)))}
+                    className={styles.btn}
+                    theme={lightTheme({
+                      colors: {
+                          primaryButtonBg: "#FF4B4B",
+                          primaryButtonText: "#F3FFFE",
+                          accentText: "#FF4B4B",
+                          borderColor: "#FF4B4B",
+                          separatorLine: "#FF4B4B",
+                          accentButtonBg: "#FF4B4B",
+                          accentButtonText: "#F3FFFE",
+                          secondaryButtonHoverBg: "#FF4B4B",
+                          secondaryButtonBg: "#4ec03f",
+                          connectedButtonBgHover: "#4ec03f",
+                          walletSelectorButtonHoverBg: "#FF4B4B",
+                          secondaryButtonText: "#FF4B4B",
+                        },
+                      })}
+                    onSuccess={() => {
+                      toast(`${raffleValue}x Raffle Bought!`, {
+                        icon: "✅",
+                        position: "bottom-center",
+                      });
+                    }}
+                    onError={(e) => {
+                      toast(`Purchase failed.`, {
+                        icon: "❌",
+                        position: "bottom-center",
+                      });
+                    }}
+                  >
+                    Buy Raffle
+                  </Web3Button>
+                    :
+                    <Web3Button
+                    contractAddress={RAFFLES_ADDRESS}
+                    action={async () => await buyRaffle(raffleValue, await calcCost(raffleValue, Number(raffle?.raffleCost)))}
+                    className={styles.btn}
+                    theme={lightTheme({
+                      colors: {
+                          primaryButtonBg: "#4ec03f",
+                          primaryButtonText: "#F3FFFE",
+                          accentText: "#4ec03f",
+                          borderColor: "#4ec03f",
+                          separatorLine: "#4ec03f",
+                          accentButtonBg: "#4ec03f",
+                          accentButtonText: "#F3FFFE",
+                          secondaryButtonHoverBg: "#4ec03f",
+                          secondaryButtonBg: "#4ec03f",
+                          connectedButtonBgHover: "#4ec03f",
+                          walletSelectorButtonHoverBg: "#4ec03f",
+                          secondaryButtonText: "#4ec03f",
+                        },
+                      })}
+                    onSuccess={() => {
+                      toast(`${raffleValue}x Raffle Bought!`, {
+                        icon: "✅",
+                        position: "bottom-center",
+                      });
+                    }}
+                    onError={(e) => {
+                      toast(`Purchase failed.`, {
+                        icon: "❌",
+                        position: "bottom-center",
+                      });
+                    }}
+                  >
+                    Buy Raffle
+                  </Web3Button>
+                }
+
               </>
               : 
                   <div style={{wordBreak: 'break-all', lineHeight: '1rem'}}>

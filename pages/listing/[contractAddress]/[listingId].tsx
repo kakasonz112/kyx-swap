@@ -20,6 +20,7 @@ import {
   MARKETPLACE_ADDRESS,
   NETWORK,
   NFT_COLLECTION_ADDRESS,
+  CURRENCY_ADDRESS
 } from "../../../const/contractAddresses";
 import styles from "../../../styles/Token.module.css";
 import Link from "next/link";
@@ -90,7 +91,7 @@ export default function TokenPage({ nft, contractMetadata, listingId }: Props) {
   */
 
   // Load AGC Balance
-  const { data: agcBalance, isLoading: loadAGC } = useBalance('0x421859BF91f00eb6b3B66d45283FA925b24AB12D');
+  const { data: agcBalance, isLoading: loadAGC } = useBalance(CURRENCY_ADDRESS);
   // Get current winning bid
   const {
     data: winningBid,
@@ -224,6 +225,7 @@ export default function TokenPage({ nft, contractMetadata, listingId }: Props) {
             <ThirdwebNftMedia
               metadata={nft.metadata}
               className={styles.image}
+              style={{maxWidth: '500px', margin: '0 auto'}}
             />
 
             <div className={styles.descriptionContainer}>
