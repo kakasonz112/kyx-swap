@@ -38,15 +38,14 @@
   display: block;
   width: 98%;
   padding: 12px 16px;
-  margin-bottom: 0.5rem;
   background: transparent;
   border: none;
   font-size: 16px;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  margin-bottom: 16px;
-  margin-left: 2px;
   color: black;
+  margin-left: 1rem;
+  text-align: center;
 }
 
 .contractMetadataContainer {
@@ -302,6 +301,19 @@
 .btn {
   /* fill remainin width */
   width: 100% !important;
+  max-width: 100px !important;
+  border-radius: 12px;
+  border-color: rgba(0, 0, 0, 0);
+}
+
+.btn:hover {
+  background-color: rgba(0, 0, 0, 0.95);
+  cursor: pointer;
+}
+
+.btnBuy:hover {
+  color: rgba(0, 0, 0, 0.95);
+  cursor: pointer;
 }
 
 .balance {
@@ -317,5 +329,12 @@
 
 .balance:hover {
   transform: rotate(-1deg);
+
+}
+
+.inputContainer {
+  display: flex;
+  max-height: 40px;
+  margin-bottom: 1rem;
 
 }

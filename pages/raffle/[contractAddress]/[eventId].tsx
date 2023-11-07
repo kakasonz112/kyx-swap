@@ -325,26 +325,26 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
 
               raffle?.raffleStatus && timerComponents.length!=0 ? 
               <>
-                <div className={styles.ticketCounter} style={{ width: '100%'}}>
-                  <button type="button" className={styles.btn} onClick={decNum} style={{marginBottom: '1rem'}}> - </button>
-                    Amount
-                    <input
-                    className={styles.input}
-                    min={1}
-                    pattern="[^0-9]*"
-                    type="number"
-                    value={raffleValue}
-                    onChange={handleChange}
-                    />
-                  <button type="button" className={styles.btn} onClick={incNum} style={{marginBottom: '1rem'}}> + </button>
-                </div>
-
+                <div className={styles.ticketCounter} style={{ width: '100%', display: 'flex'}}>
+                  <div className={styles.inputContainer}>
+                    <button type="button" className={styles.btn} onClick={decNum} style={{ height:'100%'}}> - </button>
+                      <input
+                      className={styles.input}
+                      min={1}
+                      pattern="[^0-9]*"
+                      type="number"
+                      value={raffleValue}
+                      onChange={handleChange}
+                      />
+                    <button type="button" className={styles.btn} onClick={incNum} style={{marginLeft: '1rem'}}> + </button>
+                  </div>
+                </div> 
+                <div>
                 {
                     chain?.chainId != 5 ? 
                     <Web3Button
                     contractAddress={RAFFLES_ADDRESS}
                     action={async () => await buyRaffle(raffleValue, await calcCost(raffleValue, Number(raffle?.raffleCost)))}
-                    className={styles.btn}
                     theme={lightTheme({
                       colors: {
                           primaryButtonBg: "#FF4B4B",
@@ -380,7 +380,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                     <Web3Button
                     contractAddress={RAFFLES_ADDRESS}
                     action={async () => await buyRaffle(raffleValue, await calcCost(raffleValue, Number(raffle?.raffleCost)))}
-                    className={styles.btn}
+                    className={styles.btnBuy}
                     theme={lightTheme({
                       colors: {
                           primaryButtonBg: "#4ec03f",
@@ -413,7 +413,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                     Buy Raffle
                   </Web3Button>
                 }
-
+                </div>
               </>
               : 
                   <div style={{wordBreak: 'break-all', lineHeight: '1rem'}}>
