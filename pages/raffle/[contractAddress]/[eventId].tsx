@@ -10,7 +10,7 @@ import {
   lightTheme,
   useChain
 } from "@thirdweb-dev/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import Container from "../../../components/Container/Container";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { NFT, ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -22,15 +22,13 @@ import {
   CURRENCY_ADDRESS
 } from "../../../const/contractAddresses";
 import styles from "../../../styles/Token.module.css";
-import Link from "next/link";
 import randomColor from "../../../util/randomColor";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../../util/toastConfig";
 import moment from 'moment';
-import description from '../../../description/info.json';
+import Modal from "./Modal";
 import { BigNumber } from "ethers";
-
 
 type Props = {
   nft: NFT;
@@ -45,6 +43,11 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
   const chain = useChain();
 
   const [raffleValue, setRaffleValue] = useState<number>(1);
+  const [isOpen, setisOpen] = useState(false);
+
+  const toggle = () => {
+    setisOpen(!isOpen);
+  };
 
   // Load Raffle
   const { contract: raffles } = useContract(RAFFLES_ADDRESS);
@@ -68,9 +71,16 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
     [eventId],
   );
 
-    // Load AGC Balance
-    const { data: agcBalance, isLoading: loadAGC } = useBalance(CURRENCY_ADDRESS);
+  // Load AGC Balance
+  const { data: agcBalance, isLoading: loadAGC } = useBalance(CURRENCY_ADDRESS);
     
+  // Load Player Selector
+  const { data: rafflePlayers, isLoading: loadRafflePlayers, error: errorRafflePlayers } = useContractRead(
+    raffles, 
+    "getPlayerSelector",
+    [eventId],
+  );
+
   // convert epoch to date
   function convertEpoch (epoch: any) {
     var d = new Date(0); 
@@ -428,15 +438,39 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                             winner not pick yet
                           </>
                         :
-                          raffle?.winner
+                          <u>{raffle?.winner}</u>
                         }
                         </div>
-                        <p>Raffle has Ended</p>
-
+                        <p style={{paddingTop: '20px'}}>Raffle has Ended</p>
                       </div>
                     </div>
+                      <div className={styles.modalContainer}>
+                        <button className={styles.btn} onClick={toggle} style={{minWidth: '125px', minHeight: "30px"}}>
+                          View Result 
+                        </button>
+                        <Modal isOpen={isOpen} toggle={toggle}>
+                        <p>Total Entries: <u style={{color: 'blue'}}>{Number(rafflePlayers?.length)}</u></p>
+                        
+                        <p>Winning Hash: <u style={{color: 'green'}}>{(raffle?.winningHash).toString()} </u></p>
 
+                        <p>Winning Ticket: <u style={{color: 'green'}}>{((raffle?.winningHash) % (rafflePlayers?.length))} </u></p>
 
+                        <p>Tickets Distribution </p>
+                          <div className={styles.modalContent}>
+              
+                            {
+                              rafflePlayers?.map((listing: any, key: any) => (
+                                <p key={key} style={{fontSize: '0.8rem'}}>
+                                  <span style={{color: 'rgb(229, 87, 67)'}}>{key+1}|</span> {listing.slice(0, 6)}...{listing.slice(-4)}
+                                </p>
+                              ))
+                            }
+
+                          </div>
+
+                        </Modal>
+
+                      </div>
                     <p></p>
                   </div>
 
