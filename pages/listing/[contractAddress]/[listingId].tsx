@@ -585,8 +585,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const sdk = new ThirdwebSDK(NETWORK, 
     {
-      clientId: "85c6a9c2c419f39e5efc5d3d0cf390c8",
-      secretKey: "bVTbKFefu7OjLYubj0EkwbvzJ1Fmp_O7CGlEYUTseZKvH3LIHlNcF6l6nq1kC1p-HKuvpjJWu8f6e4JW0x8N4w",
+      clientId: "4efe01e1a42b9eb67db008e00ee20394"
     }
   );
 
@@ -618,8 +617,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const sdk = new ThirdwebSDK(NETWORK, 
     {
-      clientId: "85c6a9c2c419f39e5efc5d3d0cf390c8",
-      secretKey: "bVTbKFefu7OjLYubj0EkwbvzJ1Fmp_O7CGlEYUTseZKvH3LIHlNcF6l6nq1kC1p-HKuvpjJWu8f6e4JW0x8N4w",
+      clientId: "4efe01e1a42b9eb67db008e00ee20394"
     }
   );
 

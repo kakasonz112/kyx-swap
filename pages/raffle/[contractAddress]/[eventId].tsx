@@ -490,8 +490,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const eventId = context.params?.eventId as string;
   const sdk = new ThirdwebSDK(NETWORK, 
     {
-      clientId: "be9cdb5018fb8339b6bd84a52ef0471b",
-      secretKey: 'AyVcg6XH3YG4cadl2voRkhZx-oNftck799h5tqynBSblHYp4eSoSpZH83d1PS1cCKjg6I-_UXef-ghcXE1MMZw',
+      clientId: "4efe01e1a42b9eb67db008e00ee20394"
     }
   );
 
@@ -526,8 +525,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   const sdk = new ThirdwebSDK(NETWORK, 
     {
-      clientId: "be9cdb5018fb8339b6bd84a52ef0471b",
-      secretKey: 'AyVcg6XH3YG4cadl2voRkhZx-oNftck799h5tqynBSblHYp4eSoSpZH83d1PS1cCKjg6I-_UXef-ghcXE1MMZw',
+      clientId: "4efe01e1a42b9eb67db008e00ee20394"
     }
   );
 
