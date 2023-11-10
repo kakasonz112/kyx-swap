@@ -60,7 +60,13 @@ const Home: NextPage = () => {
   );
   arr = Array.from({length: totalEvent?.toNumber()}, (_, i) => i + 1);
 
-  // ---------------//
+  // Load Valid Raffles
+  const { data: validRaffles, isLoading: loadValidRaffle } = useContractRead(
+    raffles, 
+    "getValidRaffles",
+  );
+
+  // --------------- //
 
   // All listings
   const { data: auctionListings, isLoading: loadingAuctions } =
@@ -69,7 +75,7 @@ const Home: NextPage = () => {
   const { data: validAuctionListings, isLoading: loadingValidAuctions } =
   useValidEnglishAuctions(marketplace);
 
-  // --------------- //
+  // ---------------<AdvancedBannerTop /> //
   const reloadPage = () => {
     window.location.reload();
 }
@@ -183,8 +189,8 @@ const Home: NextPage = () => {
           loadRaffles ? 
             <LoadingSpinner />
           : 
-
-          <div className={styles.group}>
+          <>
+          <div className={styles.group} style={{width: '100vw'}}>
               <div className={styles.groupLabel} style={{color: 'rgb(60, 179, 113)'}}> 
                 Available 
               </div>
@@ -194,20 +200,55 @@ const Home: NextPage = () => {
               : 
                   (
                     arr?.reverse().map((listing, key) => (
-                      
-                      <Link
-                      href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
-                      key={listing}
-                      >
-                        <RaffleWrapper eventId={listing} key={key}/> 
-                        
-                      </Link>
+                        validRaffles?.some(((listing2: any, index2: any) => listing == listing2)) ? 
+                          <Link
+                          href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
+                          key={listing}
+                          >
+                            <RaffleWrapper eventId={listing} key={key}/> 
+                            
+                          </Link>
+                        : 
+                          <>
+                          </>
+
                     ))
                   )
 
             }
 
           </div>
+
+          <div className={styles.group} style={{width: '100vw'}}>
+            <div className={styles.groupLabel} style={{color: 'rgba(240, 21, 18, 0.85)'}}> 
+                Expired 
+              </div>
+            {
+              arr.length == 0 ? 
+              <span>No Raffles</span>
+              : 
+                  (
+                    arr?.reverse().map((listing, key) => (
+                        validRaffles?.some(((listing2: any, index2: any) => listing == listing2)) ? 
+                        <>
+                        </>
+                        : 
+                        <Link
+                        href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
+                        key={listing}
+                        >
+                          <RaffleWrapper eventId={listing} key={key}/> 
+                          
+                        </Link>
+
+                    ))
+                  )
+
+            }
+
+          </div>
+          </>
+
         }
           
       </div>

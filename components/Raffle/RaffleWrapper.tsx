@@ -17,7 +17,6 @@ import { BigNumber } from "ethers";
 import { NFT } from "@thirdweb-dev/sdk";
 import moment from 'moment';
 
-
 type Raffle = {
   raffleId: BigNumber;
   raffleStatus: boolean;
@@ -30,12 +29,9 @@ type Raffle = {
   endTimeEpoch: BigNumber;
 };
 
-
-
 type Props = {
   eventId: number;
 };
-
 
 export default function ListingWrapper({ eventId }: Props) {
 

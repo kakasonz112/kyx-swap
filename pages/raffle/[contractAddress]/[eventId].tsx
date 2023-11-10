@@ -207,6 +207,19 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
 
   });
 
+  // Function to compute num (mod a)
+  function calculateMod(num: any, entry: any)
+  {
+    // Initialize result
+    let res = 0;
+
+    // One by one process
+    // all digits of 'num'
+    for(let i = 0; i < num.length; i++)
+        res = (res * 10 +
+            parseInt(num[i])) % entry;
+    return res;
+  }
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -442,6 +455,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                         }
                         </div>
                         <p style={{paddingTop: '20px'}}>Raffle has Ended</p>
+                        
                       </div>
                     </div>
                       <div className={styles.modalContainer}>
@@ -453,7 +467,7 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                         
                         <p>Winning Hash: <u style={{color: 'green'}}>{(raffle?.winningHash).toString()} </u></p>
 
-                        <p>Winning Ticket: <u style={{color: 'green'}}>{((raffle?.winningHash) % (rafflePlayers?.length))} </u></p>
+                        <p>Winning Ticket: <u style={{color: 'green'}}>{calculateMod(raffle?.winningHash.toString(), Number(rafflePlayers?.length)) + 1} </u></p>
 
                         <p>Tickets Distribution </p>
                           <div className={styles.modalContent}>
@@ -461,7 +475,27 @@ export default function TokenPage({ nft, contractMetadata, eventId }: Props) {
                             {
                               rafflePlayers?.map((listing: any, key: any) => (
                                 <p key={key} style={{fontSize: '0.8rem'}}>
-                                  <span style={{color: 'rgb(229, 87, 67)'}}>{key+1}|</span> {listing.slice(0, 6)}...{listing.slice(-4)}
+                                  {
+                                    ( key ==  calculateMod(raffle?.winningHash.toString(), Number(rafflePlayers?.length)) ) ? 
+                                      <>
+                                        <div className={styles.winnerBox}>
+                                          <span style={{color: 'rgb(229, 87, 67)'}}>
+                                            {key+1}|
+                                          </span> 
+                                          {listing.slice(0, 6)}...{listing.slice(-4)}
+                                        </div>
+                                      </>
+                                      
+                                    :
+
+                                      <>
+                                        <span style={{color: 'rgb(229, 87, 67)'}}>
+                                          {key+1}|
+                                        </span> 
+                                        {listing.slice(0, 6)}...{listing.slice(-4)}
+                                      </>
+                                  }
+                                  
                                 </p>
                               ))
                             }

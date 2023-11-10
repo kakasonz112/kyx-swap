@@ -378,3 +378,9 @@
   padding: 10px;
   border-top: solid 1px black;
 }
+
+.winnerBox {
+  border: solid 2px black;
+  padding: 3px;
+  background-color: rgb(0,0,0,0.2);
+}
