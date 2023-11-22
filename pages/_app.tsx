@@ -1,7 +1,6 @@
 import type { AppProps } from "next/app";
 import { Navbar } from "../components/Navbar/Navbar";
 import NextNProgress from "nextjs-progressbar";
-import { NETWORK } from "../const/contractAddresses";
 import "../styles/globals.css";
 import Head from 'next/head';
 import { ethers } from "ethers";

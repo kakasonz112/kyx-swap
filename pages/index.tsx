@@ -94,15 +94,18 @@ const Home: NextPage = () => {
         </div>
         <div style={{display: 'flex', gap: '10px'}}>
           {chains.map((x) => (
-        <button
-          disabled={!switchNetwork || x.id === chain?.id}
-          key={x.id}
-          onClick={() => switchNetwork?.(x.id)}
-        >
-          Switch To {x.name}
-          {isLoading && pendingChainId === x.id && ' (switching)'}
-        </button>
-      ))}
+            <button
+              disabled={!switchNetwork || x.id === chain?.id}
+              key={x.id}
+              onClick={() => switchNetwork?.(x.id)}
+            >
+              Switch To {x.name}
+              {isLoading && pendingChainId === x.id && ' (switching)'}
+            </button>
+          ))}
+        </div>
+        <div>
+          
         </div>
       </div>
 
