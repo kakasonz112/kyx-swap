@@ -41,10 +41,10 @@ export const AdvancedBannerTop = () => {
     }
 
     const background: BannerLayer = {
-        image: checkTime? "/ATG_Market_Light3.png" : "/ATG_Market_Dark3.png",
+        image: checkTime? "/kyx_Dark1.png" : "/kyx_Dark1.png",
         translateY: [15, 15],
-        opacity: [1, 0.01],
-        scale: [1.05, 1.3, "easeOutCubic"],
+        opacity: [1.05, 0.01],
+        scale: [1, 1.3, "easeOutCubic"],
         shouldAlwaysCompleteAnimation: true,
         expanded: true,
         
@@ -88,7 +88,7 @@ export const AdvancedBannerTop = () => {
   return (
     <ParallaxBanner
       layers={[background, headline, foreground2, gradientOverlay]}
-      className="full" style={{height:'100vh', marginTop: '8vh'}}
+      className="full" style={{height:'500px', marginTop: '8vh'}}
     />
   );
 };

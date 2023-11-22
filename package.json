@@ -11,11 +11,8 @@
     "deploy": "next build && next export && npx thirdweb@latest upload out"
   },
   "dependencies": {
-    "@thirdweb-dev/auth": "^3.2.35",
-    "@thirdweb-dev/chains": "^0.1.46",
-    "@thirdweb-dev/react": "^3.14.35",
-    "@thirdweb-dev/sdk": "^3.10.54",
-    "@thirdweb-dev/storage": "^1.2.7",
+    "@web3modal/ethereum": "^2.7.1",
+    "@web3modal/react": "^2.7.1",
     "ethers": "^5.7.2",
     "moment": "^2.29.4",
     "next": "^13",
@@ -25,7 +22,9 @@
     "react-hook-form": "^7.43.0",
     "react-hot-toast": "^2.4.0",
     "react-modal": "^3.16.1",
-    "react-scroll-parallax": "^3.4.2"
+    "react-scroll-parallax": "^3.4.2",
+    "viem": "^1.19.6",
+    "wagmi": "^1.4.7"
   },
   "devDependencies": {
     "@types/node": "^18.11.11",

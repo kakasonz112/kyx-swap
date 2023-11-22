@@ -1,14 +1,13 @@
-import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Navbar.module.css";
+import { Web3Button } from '@web3modal/react'
 
 /**
  * Navigation bar that shows up on all pages.
  * Rendered in _app.tsx file above the page content.
  */
 export function Navbar() {
-  const address = useAddress();
 
   return (
     <div className={styles.navContainer}>
@@ -16,8 +15,8 @@ export function Navbar() {
         <div className={styles.navLeft}>
           <Link href="/" className={`${styles.homeLink} ${styles.navLeft}`}>
             <Image
-              src="/AGC.png"
-              width={48}
+              src="/kyx_Dark1.png"
+              width={155}
               height={48}
               alt="NFT marketplace sample logo"
             />
@@ -26,7 +25,7 @@ export function Navbar() {
 
         <div className={styles.navRight}>
           <div className={styles.navConnect}>
-            <ConnectWallet theme="dark" btnTitle="Connect Wallet" />
+          <Web3Button icon="show" label="Connect Wallet" balance="show"/>
           </div>
 
         </div>

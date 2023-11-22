@@ -1,21 +1,39 @@
 import type { AppProps } from "next/app";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Navbar } from "../components/Navbar/Navbar";
 import NextNProgress from "nextjs-progressbar";
 import { NETWORK } from "../const/contractAddresses";
 import "../styles/globals.css";
 import Head from 'next/head';
 import { ethers } from "ethers";
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Modal } from '@web3modal/react'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { goerli, zetachainAthensTestnet, polygonMumbai } from 'viem/chains'
 
 function MyApp({ Component, pageProps }: AppProps) {
+  // 1. Get projectId at https://cloud.walletconnect.com
+const projectId = 'c03480d94964569827f3b2274285b12b'
+const chains = [goerli, zetachainAthensTestnet, polygonMumbai]
+
+// 2. Create wagmiConfig
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+})
+const ethereumClient = new EthereumClient(wagmiConfig, chains)
+
+
+
+
   return (
-    <ThirdwebProvider 
-      activeChain={NETWORK} 
-      clientId="4efe01e1a42b9eb67db008e00ee20394"
-    >
+    <>
+    <WagmiConfig config={wagmiConfig}>
+
       <Head>
-        <title>AGC Marketplace</title>
-        <meta name="Art Tokyo Global" content='AGC Marketplace'></meta>
+        <title>KYEX Swap</title>
+        <meta name="KYEX Swap" content='KYEX Swap'></meta>
       </Head>
       {/* Progress bar when navigating between pages */}
       <NextNProgress
@@ -30,7 +48,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Navbar />
       {/* Render the actual component (page) */}
       <Component {...pageProps} />
-    </ThirdwebProvider>
+    </WagmiConfig>
+    <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+    </>
   );
 }
 

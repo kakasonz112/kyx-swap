@@ -2,78 +2,42 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Profile.module.css";
-import {
-  useContract,
-  useValidEnglishAuctions,
-  useEnglishAuctions,
-  useContractRead
-
-} from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Container from "../components/Container/Container";
-import ListingWrapper from "../components/ListingWrapper/ListingWrapper";
-import RaffleWrapper from "../components/Raffle/RaffleWrapper";
 import Skeleton from "../components/Skeleton/Skeleton";
-import {
-  MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-  RAFFLES_ADDRESS
-} from "../const/contractAddresses";
 import { ParallaxProvider } from "react-scroll-parallax";
 import { AdvancedBannerTop } from "../components/AdvancedBanner";
 import LoadingSpinner from "../components/Spinner/Spinner";
 import { BigNumber } from "ethers";
+import { useAccount, useBalance, useNetwork, useSignMessage, useSwitchNetwork } from 'wagmi'
 
-var arr: any[] = [];
-var arr2: any[] = [];
-type Raffle = {
-  raffleId: BigNumber;
-  raffleStatus: boolean;
-  nftContract: string;
-  tokenId: BigNumber;
-  totalEntries: BigNumber;
-  raffleCost: BigNumber;
-  raffleCurrency: string;
-  winner: string;
-  endTimeEpoch: BigNumber;
-};
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const [tab, setTab] = useState<"all" | "raffles" | "reload">("all");
+  const [tab, setTab] = useState<"all" | "reload">("all");
+  const { address, isConnecting, isDisconnected, connector } = useAccount();
+  const { chain } = useNetwork();
+  const { data: balance } = useBalance({
+    address: address,
+  })
+  const { chains, error, pendingChainId, switchNetwork } =
+  useSwitchNetwork()
 
+
+  const messageToSign = 'This is a Test message';
+
+  const { data, isLoading, isError, signMessage } = useSignMessage({
+    message: messageToSign,
+  });
+
+  if (isLoading) return <p>Please confirm on your wallet...</p>;
+  if (isError) return <p>Could not sign the message</p>;
   // --------------- //
   // Contract declaration
-  const { contract: marketplace } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace-v3"
-  );
-
-  const { contract: raffles } = useContract(RAFFLES_ADDRESS);
-  // ---------------//
-
-  // Raffles 
-  const { data: totalEvent, isLoading: loadRaffles, error: errorRaffles } = useContractRead(
-    raffles, 
-    "eventId"
-  );
-  arr = Array.from({length: totalEvent?.toNumber()}, (_, i) => i + 1);
-
-  // Load Valid Raffles
-  const { data: validRaffles, isLoading: loadValidRaffle } = useContractRead(
-    raffles, 
-    "getValidRaffles",
-  );
+  
 
   // --------------- //
-
-  // All listings
-  const { data: auctionListings, isLoading: loadingAuctions } =
-  useEnglishAuctions(marketplace); 
-  // All Active Listings
-  const { data: validAuctionListings, isLoading: loadingValidAuctions } =
-  useValidEnglishAuctions(marketplace);
 
   // ---------------<AdvancedBannerTop /> //
   const reloadPage = () => {
@@ -81,9 +45,6 @@ const Home: NextPage = () => {
 }
   return (
   <>
-    <ParallaxProvider>
-      <AdvancedBannerTop />
-    </ParallaxProvider>
     <Container maxWidth="lg">
       <div className={styles.profileHeader}>
 
@@ -95,16 +56,9 @@ const Home: NextPage = () => {
         ${tab === "all" ? styles.activeTab : ""}`}
           onClick={() => setTab("all")}
         >
-          Auctions
+          Swap
         </h3>
 
-        <h3
-          className={`${styles.tab}
-        ${tab === "raffles" ? styles.activeTab : ""}`}
-          onClick={() => setTab("raffles")}
-        >
-          Raffles
-        </h3>
         <h3
           className={`${styles.tab}
         ${tab === "reload" ? styles.activeTab : ""}`}
@@ -126,131 +80,30 @@ const Home: NextPage = () => {
         className={`${
           tab === "all" ? styles.activeTabContent : styles.tabContent
         }`}
+        style={{display: 'flex', flexDirection: 'column', gap: '0'}}
       >
-        {
-          loadingValidAuctions && loadingAuctions ? 
-            <LoadingSpinner />
-          :
-          <div>
-              {loadingValidAuctions ? (
-                <LoadingSpinner />
-              ) : 
-              <div className={styles.group}>
-                <div className={styles.groupLabel} style={{color: 'rgb(60, 179, 113)'}}> 
-                  Available 
-                </div>
-                {
-                  validAuctionListings && validAuctionListings.length === 0 ? (
-                    <span>No Auction is Available yet.</span>
-                  ) : 
-                  (
-                    
-
-                    validAuctionListings?.sort((a,b) => a.endTimeInSeconds - b.endTimeInSeconds).map((listing, index) => (
-                      <ListingWrapper listing={listing} key={index} />
-                    ))
-                  )
-                }
-              </div>
-              }
-
-            <div className={styles.group}>
-              <div className={styles.groupLabel} style={{color: 'rgba(240, 21, 18, 0.85)'}}> 
-                Expired 
-              </div>
-
-              {loadingAuctions ? (
-                <LoadingSpinner />
-              ) : auctionListings && auctionListings.length === 0 ? (
-                <span>No Auction is Available yet.</span>
-              ) : (
-                auctionListings?.map((listing, index) => (
-
-                    validAuctionListings?.some(((listing2, index2) => listing?.id == listing2?.id)) ? 
-                      <></>
-                    :
-                    <ListingWrapper listing={listing} key={index} />
-
-                ))
-              )}
-            </div>
-
-          </div>
-
-        }
-      </div>
-
-      <div
-        className={`${
-          tab === "raffles" ? styles.activeTabContent : styles.tabContent
-        }`}
-      >
-        {
-          loadRaffles ? 
-            <LoadingSpinner />
-          : 
-          <>
-          <div className={styles.group} style={{width: '100vw'}}>
-              <div className={styles.groupLabel} style={{color: 'rgb(60, 179, 113)'}}> 
-                Available 
-              </div>
-            {
-              arr.length == 0 ? 
-              <span>No Raffles</span>
-              : 
-                  (
-                    arr?.reverse().map((listing, key) => (
-                        validRaffles?.some(((listing2: any, index2: any) => listing == listing2)) ? 
-                          <Link
-                          href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
-                          key={listing}
-                          >
-                            <RaffleWrapper eventId={listing} key={key}/> 
-                            
-                          </Link>
-                        : 
-                          <>
-                          </>
-
-                    ))
-                  )
-
-            }
-
-          </div>
-
-          <div className={styles.group} style={{width: '100vw'}}>
-            <div className={styles.groupLabel} style={{color: 'rgba(240, 21, 18, 0.85)'}}> 
-                Expired 
-              </div>
-            {
-              arr.length == 0 ? 
-              <span>No Raffles</span>
-              : 
-                  (
-                    arr?.reverse().map((listing, key) => (
-                        validRaffles?.some(((listing2: any, index2: any) => listing == listing2)) ? 
-                        <>
-                        </>
-                        : 
-                        <Link
-                        href={`/raffle/${RAFFLES_ADDRESS}/${listing}`}
-                        key={listing}
-                        >
-                          <RaffleWrapper eventId={listing} key={key}/> 
-                          
-                        </Link>
-
-                    ))
-                  )
-
-            }
-
-          </div>
-          </>
-
-        }
-          
+        <p>Wallet: {address}</p>
+        <p>Type: {connector?.name}</p> 
+        <p>Chain Name: {chain?.name}</p>
+        <p>Chain Id: {chain?.id}</p>
+        <p>Balance: {Number(balance?.formatted).toFixed(4)} {balance?.symbol}</p>
+        <div style={{marginBottom: '10px'}}>
+          <button disabled={!signMessage} onClick={() => signMessage()} className={styles?.button}>
+            Sign message
+          </button>
+        </div>
+        <div style={{display: 'flex', gap: '10px'}}>
+          {chains.map((x) => (
+        <button
+          disabled={!switchNetwork || x.id === chain?.id}
+          key={x.id}
+          onClick={() => switchNetwork?.(x.id)}
+        >
+          Switch To {x.name}
+          {isLoading && pendingChainId === x.id && ' (switching)'}
+        </button>
+      ))}
+        </div>
       </div>
 
     </Container>
