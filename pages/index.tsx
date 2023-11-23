@@ -11,12 +11,15 @@ import { AdvancedBannerTop } from "../components/AdvancedBanner";
 import LoadingSpinner from "../components/Spinner/Spinner";
 import { BigNumber } from "ethers";
 import { useAccount, useBalance, useNetwork, useSignMessage, useSwitchNetwork, useSendTransaction, usePrepareSendTransaction } from 'wagmi'
-import { ethers, utils } from 'ethers';
-import { serialize, deserialize } from 'wagmi'
+import tss from "../const/tss.json";
+import zrc20 from "../const/zrc20.json";
+import chainName from "../const/chains.json"
+import { swapContract, prepareData } from "../const/contractAddress";
 
 const Home: NextPage = () => {
   const [networkId, setNetworkId] = useState<number>(5);
   const [toNetwork, setToNetwork] = useState<number>(5);
+  const [swapAmount, setSwapAmount] = useState<number>(0.01);
 
   const router = useRouter();
   const [tab, setTab] = useState<"all" | "reload">("all");
@@ -42,6 +45,7 @@ const Home: NextPage = () => {
   }
 
   const options1 = chains.map((option) => {
+    if (option.id != 7001)
     return <option value={option.id} onChange={()=> setNetworkId(option.id)}>{option.name}</option>
   })
 
@@ -53,13 +57,50 @@ const Home: NextPage = () => {
     switchNetwork?.(networkId);
   }, [networkId]) 
 
+
   const { config } = usePrepareSendTransaction({
-    to: "0x8531a5aB847ff5B22D855633C25ED1DA3255247e",
-    value: BigInt(10000000000000000),
+    // @ts-ignore
+    to: tss[`${chain?.id}`],
+    value: BigInt(swapAmount*1000000000000000000),
   })
 
   const { data: sendTx, isLoading: loadSendTx, isSuccess, sendTransaction } =
   useSendTransaction(config);
+
+  function getData(contract: any, zrc20Contract: any, recipient: any) {
+    let data1;
+    try {
+      data1 = prepareData(
+        contract,
+        ["address", "bytes"],
+        [zrc20Contract, recipient]
+      );
+    } catch (e) {
+
+    }
+    return data1 as unknown as `0x${string}`;
+  }
+
+  const prepareSWAP = (tokenAddress: string,recipient: any) => {
+      const { data: swapHash, sendTransaction: sendSwap } =
+      useSendTransaction({
+        data: getData(swapContract, zrc20[toNetwork], address),
+        // @ts-ignore
+        to:  tss[`${chain?.id}`],
+        value: BigInt(swapAmount*1000000000000000000),
+      });
+    return (
+      <div style={{marginBottom: '10px'}}>
+        <button disabled={!sendSwap} onClick={() => sendSwap?.()}>
+          {/* @ts-ignore */}
+          Swap To {chainName[toNetwork]}
+        </button>
+        <br></br>
+        Transaction TXN: {swapHash?.hash}
+      </div>
+    )
+  } 
+
 
   if (isLoading) return <p>Please confirm on your wallet...</p>;
   if (isError) return <p>Could not sign the message</p>;
@@ -116,28 +157,35 @@ const Home: NextPage = () => {
               Sign message
             </button>
           </div>
-
+        <Container maxWidth="xs">
+          {/* @ts-ignore */}
+          TSS: {tss[`${chain?.id}`]} <br></br>
           <div style={{display: 'flex', gap: '10px'}}>
-            From: {networkId}
+            
+            
+            From: <br></br>
             <select onChange={(e) => setNetworkId(Number(e.target.value))}>
               {options1}
             </select>
-            {/* To: {toNetwork}
+            To: {toNetwork}
             <select onChange={(e) => setToNetwork(Number(e.target.value))}>
               {options2}
-            </select> */}
-            <div style={{marginBottom: '10px'}}>
+            </select>
+            <br></br>
+          </div>
+          <br></br>
+          AmountToSwap:
+          <input type="number" onChange={(e) => setSwapAmount(Number(e.target.value))} style={{width: '100px'}} defaultValue={0.01}required/>
+          <br></br><br></br>
+          <div style={{marginBottom: '10px'}}>
             <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
               SwapToZETA
             </button>
           </div>
-          </div>
 
-          <br></br>
-
-        <div>
-
-        </div>
+          {prepareSWAP("0x48f80608B672DC30DC7e3dbBd0343c5F02C738Eb", "0x48f80608B672DC30DC7e3dbBd0343c5F02C738Eb")}
+          <p style={{wordBreak: 'break-word'}}>Data: {getData(swapContract, zrc20[toNetwork], address)}</p>
+        </Container>
       </div>
 
     </Container>
