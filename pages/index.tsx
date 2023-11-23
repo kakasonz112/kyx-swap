@@ -10,10 +10,14 @@ import { ParallaxProvider } from "react-scroll-parallax";
 import { AdvancedBannerTop } from "../components/AdvancedBanner";
 import LoadingSpinner from "../components/Spinner/Spinner";
 import { BigNumber } from "ethers";
-import { useAccount, useBalance, useNetwork, useSignMessage, useSwitchNetwork } from 'wagmi'
-
+import { useAccount, useBalance, useNetwork, useSignMessage, useSwitchNetwork, useSendTransaction, usePrepareSendTransaction } from 'wagmi'
+import { ethers, utils } from 'ethers';
+import { serialize, deserialize } from 'wagmi'
 
 const Home: NextPage = () => {
+  const [networkId, setNetworkId] = useState<number>(5);
+  const [toNetwork, setToNetwork] = useState<number>(5);
+
   const router = useRouter();
   const [tab, setTab] = useState<"all" | "reload">("all");
   const { address, isConnecting, isDisconnected, connector } = useAccount();
@@ -31,15 +35,35 @@ const Home: NextPage = () => {
     message: messageToSign,
   });
 
+  const changeNetwork = (selectNetwork: any) => {
+      // switchNetwork?.(selectNetwork.value);
+      console.log(selectNetwork);
+
+  }
+
+  const options1 = chains.map((option) => {
+    return <option value={option.id} onChange={()=> setNetworkId(option.id)}>{option.name}</option>
+  })
+
+  const options2 = chains.map((option) => {
+    return <option value={option.id} onChange={()=> setToNetwork(option.id)}>{option.name}</option>
+  })
+
+  useEffect(() => {
+    switchNetwork?.(networkId);
+  }, [networkId]) 
+
+  const { config } = usePrepareSendTransaction({
+    to: "0x8531a5aB847ff5B22D855633C25ED1DA3255247e",
+    value: BigInt(10000000000000000),
+  })
+
+  const { data: sendTx, isLoading: loadSendTx, isSuccess, sendTransaction } =
+  useSendTransaction(config);
+
   if (isLoading) return <p>Please confirm on your wallet...</p>;
   if (isError) return <p>Could not sign the message</p>;
-  // --------------- //
-  // Contract declaration
-  
 
-  // --------------- //
-
-  // ---------------<AdvancedBannerTop /> //
   const reloadPage = () => {
     window.location.reload();
 }
@@ -82,30 +106,37 @@ const Home: NextPage = () => {
         }`}
         style={{display: 'flex', flexDirection: 'column', gap: '0'}}
       >
-        <p>Wallet: {address}</p>
-        <p>Type: {connector?.name}</p> 
-        <p>Chain Name: {chain?.name}</p>
-        <p>Chain Id: {chain?.id}</p>
-        <p>Balance: {Number(balance?.formatted).toFixed(4)} {balance?.symbol}</p>
-        <div style={{marginBottom: '10px'}}>
-          <button disabled={!signMessage} onClick={() => signMessage()} className={styles?.button}>
-            Sign message
-          </button>
-        </div>
-        <div style={{display: 'flex', gap: '10px'}}>
-          {chains.map((x) => (
-            <button
-              disabled={!switchNetwork || x.id === chain?.id}
-              key={x.id}
-              onClick={() => switchNetwork?.(x.id)}
-            >
-              Switch To {x.name}
-              {isLoading && pendingChainId === x.id && ' (switching)'}
+          <p>Wallet: {address}</p>
+          <p>Type: {connector?.name}</p> 
+          <p>Chain Name: {chain?.name}</p>
+          <p>Chain Id: {chain?.id}</p>
+          <p>Balance: {Number(balance?.formatted).toFixed(4)} {balance?.symbol}</p>
+          <div style={{marginBottom: '10px'}}>
+            <button disabled={!signMessage} onClick={() => signMessage()} className={styles?.button}>
+              Sign message
             </button>
-          ))}
-        </div>
+          </div>
+
+          <div style={{display: 'flex', gap: '10px'}}>
+            From: {networkId}
+            <select onChange={(e) => setNetworkId(Number(e.target.value))}>
+              {options1}
+            </select>
+            {/* To: {toNetwork}
+            <select onChange={(e) => setToNetwork(Number(e.target.value))}>
+              {options2}
+            </select> */}
+            <div style={{marginBottom: '10px'}}>
+            <button disabled={!sendTransaction} onClick={() => sendTransaction?.()}>
+              SwapToZETA
+            </button>
+          </div>
+          </div>
+
+          <br></br>
+
         <div>
-          
+
         </div>
       </div>
 
