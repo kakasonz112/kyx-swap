@@ -84,6 +84,7 @@ const Home: NextPage = () => {
   const prepareSWAP = (tokenAddress: string,recipient: any) => {
       const { data: swapHash, sendTransaction: sendSwap } =
       useSendTransaction({
+        // @ts-ignore
         data: getData(swapContract, zrc20[toNetwork], address),
         // @ts-ignore
         to:  tss[`${chain?.id}`],
@@ -184,6 +185,7 @@ const Home: NextPage = () => {
           </div>
 
           {prepareSWAP("0x48f80608B672DC30DC7e3dbBd0343c5F02C738Eb", "0x48f80608B672DC30DC7e3dbBd0343c5F02C738Eb")}
+          { /* @ts-ignore */ }
           <p style={{wordBreak: 'break-word'}}>Data: {getData(swapContract, zrc20[toNetwork], address)}</p>
         </Container>
       </div>
