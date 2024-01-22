@@ -8,6 +8,9 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { goerli, zetachainAthensTestnet, polygonMumbai, bscTestnet } from 'viem/chains'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   // 1. Get projectId at https://cloud.walletconnect.com
@@ -18,7 +21,12 @@ const chains = [goerli, zetachainAthensTestnet, polygonMumbai, bscTestnet]
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: w3mConnectors({ projectId, chains }),
+  connectors: [new WalletConnectConnector({
+    options: {
+      projectId: projectId
+    },
+  })],
+  
   publicClient
 })
 const ethereumClient = new EthereumClient(wagmiConfig, chains)
